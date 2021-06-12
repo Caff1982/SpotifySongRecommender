@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1>Search Results</h1>
+{% autoescape off %}
+{{ results_html }}
+{% endautoescape %}
+
+
+{% endblock %}

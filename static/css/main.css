@@ -1,0 +1,35 @@
+body {
+	background: url("/static/images/background.jpg");
+	background-size: cover;
+	background-attachment: fixed;
+	height: 100%;
+	margin: 0;
+	line-height: 1.5;
+}
+
+tr {
+	cursor: default;
+}
+
+a:hover {
+	color:  blue;
+	transition: color 1s;
+	text-decoration: none;
+}
+
+li:hover {
+	transition:  background-color 1s ease;
+	background-color: rgba(0,0,0,0.75);
+}
+
+.list-group-item {
+background-color: rgba(0,0,0,0.5);
+border-top: 1px solid #ddd;
+border-radius: 0;
+color: #fff;
+}
+
+.table {
+	background-color: rgba(0,0,0,0.75);
+	color:  lightgray;
+}
