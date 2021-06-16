@@ -70,7 +70,9 @@ def show_recommendations(request, track_id):
     # Drop ID column and convert DataFrame to html 
     results_html = sim_df.drop(columns=['id'])[:20].to_html(index=False,
                                                             justify='center')
-    # print(results_html)
+    results_csv = sim_df.drop(columns=['id'])[:20].to_csv()
+    print(results_csv)
+
     # Update HTML for Bootstrap
     results_html = results_html.replace('class="dataframe"', 'class="table"')
     results_html = results_html.replace('thead', 'thead class="thead-dark"')
