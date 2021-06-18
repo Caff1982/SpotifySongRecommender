@@ -33,3 +33,42 @@ color: #fff;
 	background-color: rgba(0,0,0,0.75);
 	color:  lightgray;
 }
+
+/* Modal popups */
+.modal {
+	display: none;
+	position: fixed;
+	height: 100%;
+	width: 100%;
+	overflow: auto;
+	background-color: black;
+    background-color: rgba(0,0,0,.5);
+}
+
+.modal-button {
+	cursor: pointer;
+}
+
+.modal-header {
+	color: #F0F0F0;
+	background-color: #404040;
+	padding: 0px 0px;
+	text-align: right;
+}
+
+.modal-body {
+	font-size: 1.5rem;
+	position:  relative;
+}
+
+.spotify-link {
+	width: 150px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.close-btn {
+	margin-left: 95%;
+	font-size: 1.75rem;
+	cursor: pointer;
+}

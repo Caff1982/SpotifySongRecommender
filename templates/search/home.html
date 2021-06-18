@@ -22,9 +22,9 @@
 
 {% if search_results %}
 	<ul class="list-group">
-    {% for track_name, track_id in search_results %}
-    	<a href="{% url 'show_recommendations' track_id %}">
-    		<li class="list-group-item">{{ track_name }}</li>
+    {% for song_name, song_id in search_results %}
+    	<a href="{% url 'show_recommendations' song_id %}">
+    		<li class="list-group-item">{{ song_name }}</li>
     	</a>
    	{% endfor %}
   </ul>
