@@ -14,7 +14,7 @@ from .models import Song
 
 
 def home(request):
-    form = SearchForm(request.POST or None)
+    form = SearchForm(request.POST or None, auto_id=False)
     search_results = []
 
     if request.method == 'POST' and form.is_valid():

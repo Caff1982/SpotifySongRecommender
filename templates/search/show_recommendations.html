@@ -4,7 +4,7 @@
 <h1>Search Results</h1>
 <ul class="list-group">
 	{% for song in object_list %}
-		<li class="list-group-item modal-button" id="{{ song.song_id }}" 
+		<li class="list-group-item modal-button search-result-link" id="{{ song.song_id }}" 
 		data-toggle="modal" data-target="modal-popup{{ song.song_id }}">{{ song.artist }}: {{ song.name }}
 		</li>
 
@@ -20,6 +20,8 @@
 						<h5>Release Year: {{ song.release_year }}</h5>
 						<h5>Popularity: {{ song.popularity }}</h5>
 						<h5>Tempo: {{ song.tempo }}</h5>
+					</div>
+					<div class="modal-footer">
 						<h5 class="spotify-link"><a href="https://open.spotify.com/track/{{ song.song_id }}"  target="_blank">Listen on Spotify</a></h5>
 					</div>
 				</div>

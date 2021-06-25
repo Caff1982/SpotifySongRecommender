@@ -17,16 +17,47 @@ a:hover {
 	text-decoration: none;
 }
 
-li:hover {
+ul {
+ 	list-style-type: none;
+}
+
+#heading {
+	font:  20px Helvetica, sans-serif;
+	color:  red;
+	font-size: 5rem;
+}
+
+#main-container {
+	padding: 1rem 6rem;
+}
+
+#search-options {
+	background-color: rgba(0,0,0,0.5);
+	padding-left: 10px;
+}
+
+.search-option-item {
+	color: #fff;
+}
+
+.search-result-link:hover {
 	transition:  background-color 1s ease;
 	background-color: rgba(0,0,0,0.75);
 }
 
+.jumbotron {
+	background-color: rgba(0,0,0,0.0);
+}
+
+.dropdown-menu {
+	background-color: rgba(0,0,0,0.0);
+}
+
 .list-group-item {
-background-color: rgba(0,0,0,0.5);
-border-top: 1px solid #ddd;
-border-radius: 0;
-color: #fff;
+	background-color: rgba(0,0,0,0.5);
+	border-top: 1px solid #ddd;
+	border-radius: 0;
+	color: #fff;
 }
 
 .table {
@@ -71,4 +102,11 @@ color: #fff;
 	margin-left: 95%;
 	font-size: 1.75rem;
 	cursor: pointer;
+}
+
+.modal-footer {
+	color: #F0F0F0;
+	background-color: #404040;
+	padding: 10px 10px;
+	text-align: center;
 }
