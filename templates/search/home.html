@@ -3,35 +3,32 @@
 
 <section>
 	<div id="main-container" class="container">
-		<div id="search-bar" class="container-fluid">
-			<div class="row">
-				<form method="POST" class="form-row">
-					{% csrf_token %}
-					<div class="form-group col">
-						{{ form.song_title }}
+		<div id="search-bar-row" class="row justify-content-center">
+			<form method="POST" class="form-row">
+				{% csrf_token %}
+				<div class="form-group col-md2">
+					{{ form.song_title }}
+				</div>
+				<div class="form-group col dropdown">
+					<button class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown">Search Options
+						<span class="caret"></span>
+					</button>
+					<div class="dropdown-menu">
+						<ul id="search-options">
+							{% for option in form.search_options %}
+							<li class="search-option-item">{{ option }}</li>
+							{% endfor %}
+						</ul>
 					</div>
-					<div class="form-group col dropdown">
-						<button class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown">Search Options
-							<span class="caret"></span>
-						</button>
-						<div class="dropdown-menu">
-							<ul id="search-options">
-								{% for option in form.search_options %}
-								<li class="search-option-item">{{ option }}</li>
-								{% endfor %}
-							</ul>
-						</div>
-					</div>
-					<div class="form-group col-sm">
-		          <button class="btn btn-secondary btn-block" type="submit">Search</button>
-		        </div>
-				</form>
-			</div>
+				</div>
+				<div class="form-group col">
+	          <button class="btn btn-secondary btn-block" type="submit">Search</button>
+	        </div>
+			</form>
 		</div>
 	</div>
 </section>
 
-	
 <br />
 
 {% if search_results %}

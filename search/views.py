@@ -20,6 +20,7 @@ def home(request):
     if request.method == 'POST' and form.is_valid():
         song_title = form.cleaned_data['song_title']
         print('song_title: ', song_title)
+        print('search options: ', form.cleaned_data['search_options'])
         # Connect to Spotipy
         sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials(
                                 client_id=settings.SPOTIPY_CLIENT_ID,
