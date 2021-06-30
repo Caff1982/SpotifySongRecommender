@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.views.generic import ListView
+from django.views.generic.edit import FormMixin
 from django.conf import settings
 
 import pandas as pd
@@ -9,18 +10,17 @@ from sklearn.metrics.pairwise import cosine_similarity
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 
-from .forms import SearchForm
+from .forms import SearchForm, OptionsForm
 from .models import Song
 
 
 def home(request):
-    form = SearchForm(request.POST or None, auto_id=False)
+    form = SearchForm(request.GET or None, auto_id=False)
     search_results = []
 
-    if request.method == 'POST' and form.is_valid():
+    if request.method == 'GET' and form.is_valid():
         song_title = form.cleaned_data['song_title']
         print('song_title: ', song_title)
-        print('search options: ', form.cleaned_data['search_options'])
         # Connect to Spotipy
         sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials(
                                 client_id=settings.SPOTIPY_CLIENT_ID,
@@ -44,8 +44,19 @@ def home(request):
 class SearchResults(ListView):
     model = Song
     template_name = 'search/show_recommendations.html'
+    form_class = OptionsForm
 
-    def get_queryset(self):
+    def get(self, request, **kwargs):
+        form = OptionsForm(self.request.GET or None, auto_id=False)
+        # Update search preferences if form is submitted
+        if self.request.method == 'GET' and form.is_valid():
+            features = form.cleaned_data['search_options']
+        else:
+            features = ['energy', 'danceability',
+                    'speechiness', 'acousticness',
+                    'instrumentalness', 'liveness', 'valence']
+
+        print('q: ', self.request.GET.get('search_options'))
         target_id = self.kwargs['song_id']
         # Connect to Spotipy
         sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials(
@@ -53,15 +64,12 @@ class SearchResults(ListView):
                                 client_secret=settings.SPOTIPY_CLIENT_SECRET))
         # Get features for track
         track_features = sp.audio_features(target_id)[0]
-        # Keep only the columns we need
-        cols = ['energy', 'danceability',
-            'speechiness', 'acousticness',
-            'instrumentalness', 'liveness', 'valence']
-        track_profile = [track_features[col] for col in cols]
+        
+        track_profile = [track_features[feat] for feat in features]
         track_profile = np.array(track_profile).reshape(1, -1)
 
         df = pd.read_csv('./item_profiles.csv')
-        item_profiles = df[cols]
+        item_profiles = df[features]
         print('Item_profiles shape: ', item_profiles.shape)
         print('Track profiles shape: ', track_profile.shape)
         # Keep ID's to use a labels
@@ -72,50 +80,17 @@ class SearchResults(ListView):
         # Use most similar tracks to create a list of Song objects
         print(labels.head(10))
         queryset = [Song.objects.filter(song_id=song_id)[0] for song_id in labels['song_id'][:20]]
-        return queryset
-
         
+        context = {
+            'queryset': queryset,
+            'form': form,
+            'features': features
+        }
 
+        return render(request, self.template_name, context)
 
-
-
-
-def show_recommendations(request, track_id):
-    # Connect to Spotipy
-    sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials(
-                            client_id=settings.SPOTIPY_CLIENT_ID,
-                            client_secret=settings.SPOTIPY_CLIENT_SECRET))
-    # Get features for track
-    track_features = sp.audio_features(track_id)[0]
-    # Keep only the columns we need
-    cols = ['energy', 'danceability',
-        'speechiness', 'acousticness',
-        'instrumentalness', 'liveness', 'valence']
-    track_profile = [track_features[col] for col in cols]
-    track_profile = np.array(track_profile).reshape(1, -1)
-    # Load DataFrame to create item-profiles DataFrame
-    df = pd.read_csv('./tracks.csv')
-    item_profiles = df[cols]
-    print('Item_profiles shape: ', item_profiles.shape)
-    print('Track profiles shape: ', track_profile.shape)
-    # labels is a DataFrame matching item-profiles to trakc& artis names
-    labels = df[['id', 'artists', 'name']]
-    labels['artists'] = labels['artists'].str.replace(r'[^A-Za-z\s]+', '')
-
-    sim_df = pd.DataFrame(data=labels, columns=['id', 'artists', 'name'])
-    sim_df['similarity'] = cosine_similarity(item_profiles, track_profile)
-    sim_df.sort_values(by=['similarity'], ascending=False, inplace=True)
-    # Rename columns for displaying on website
-    sim_df.columns = ['id', 'Artist', 'Song', 'Similarity']
-    # Drop ID column and convert DataFrame to html 
-    results_html = sim_df.drop(columns=['id'])[:20].to_html(index=False,
-                                                            justify='center')
-    results_csv = sim_df.drop(columns=['id'])[:20].to_csv()
-
-    # Update HTML for Bootstrap
-    results_html = results_html.replace('class="dataframe"', 'class="table"')
-    results_html = results_html.replace('thead', 'thead class="thead-dark"')
-    context = {
-        'results_html': results_html,
-    }
-    return render(request, 'search/show_recommendations.html', context)
+    # def get_context_data(self, *args, **kwargs):
+    #     context = super(SearchResults, self).get_context_data(**kwargs)
+    #     context['form'] = OptionsForm()
+    #     print('context form: ', context['form']['search_options'])
+    #     return context

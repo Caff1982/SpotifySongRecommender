@@ -1,9 +1,42 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h1>Search Results</h1>
+
+<div class="container form-row justify-content-center">
+	<form method="GET" class="form-row">
+		<div class="form-group col dropdown">
+			<button class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown">Filter Search Options
+				<span class="caret"></span>
+			</button>
+			<div class="dropdown-menu">
+				<ul id="search-options">
+					{% for option_id, option_label in form.search_options.field.widget.choices %}
+						{% if option_id in features %}
+							<li class="search-option-item"><label>
+								<input type="checkbox" name="search_options" value="{{ option_id }}" checked class="form-group">{{ option_label }}
+								</label>
+							</li>
+						{% else %}
+							<li class="search-option-item"><label>
+								<input type="checkbox" name="search_options" value="{{ option_id }}" class="form-group">{{ option_label }}
+								</label>
+							</li>
+						{% endif %}
+					{% endfor %}
+				</ul>
+			</div>
+		</div>
+		<div class="form-group col">
+		  <button class="btn btn-secondary btn-block" type="submit">Update Preferences</button>
+		</div>
+	</form>
+</div>
+
+
+
+
 <ul class="list-group">
-	{% for song in object_list %}
+	{% for song in queryset %}
 		<li class="list-group-item modal-button search-result-link" id="{{ song.song_id }}" 
 		data-toggle="modal" data-target="modal-popup{{ song.song_id }}">{{ song.artist }}: {{ song.name }}
 		</li>
@@ -22,41 +55,16 @@
 						<h5>Tempo: {{ song.tempo }}</h5>
 					</div>
 					<div class="modal-footer">
-						<h5 class="spotify-link"><a href="https://open.spotify.com/track/{{ song.song_id }}"  target="_blank">Listen on Spotify</a></h5>
+						<h5><a class="spotify-link" href="https://open.spotify.com/track/{{ song.song_id }}"  target="_blank">Listen on Spotify</a></h5>
 					</div>
 				</div>
 			</div>
 		</div>
-
-
-		<!-- <div class="modal" id="modal-popup{{ song.song_id }}">
-			<div class="modal-content">
-	      <div class="modal-header">
-	        <h2 class="songtitle">{{ song.name }}</h2>
-	        <span class="close-btn">&times;</span>
-	      </div>
-
-	      <div class="modal-body">
-	        <div class="row">
-	          <div class="col-md">
-	            <h5>Title: {{ song.title }}</h5>
-	            <h5>Year: {{ song.release_year }}</h5>
-	            <h5>Popularity: {{ song.popularity }}</h5>
-	            <h5>Duration (ms): {{ song.duration_ms }}</h5>
-	            <h5><a id="spotify-link" href="https://open.spotify.com/track/{{ song.song_id }}" target="_blank">Listen on Spotify</a></h5>
-	          </div>
-	        </div>
-	      </div>
-	    </div>
-		</div> -->
 	
 	{% endfor %}
 </ul>
 
 
-<!-- <ul class="list-group">
-	{% for song in object_list %}
-		<li class="list-group-item">{{ song.artist }}: {{ song.name }}</li>
-	{% endfor %}
-</ul> -->
+
+
 {% endblock %}
