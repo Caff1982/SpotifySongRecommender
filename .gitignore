@@ -1,6 +1,5 @@
 tracks.csv
 
-db.sqlite3
 env/
 
 *.log
