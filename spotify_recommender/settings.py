@@ -129,8 +129,11 @@ STATICFILES_DIRS = (
 SPOTIPY_CLIENT_ID = os.environ['SPOTIFY_CLIENT_ID']
 SPOTIPY_CLIENT_SECRET = os.environ['SPOTIFY_CLIENT_SECRET']
 
-# Configure Django App for Heroku.
-import django_heroku
+# Heroku: Update database configuration from $DATABASE_URL.
+import dj_database_url
+db_from_env = dj_database_url.config(conn_max_age=500)
+DATABASES['default'].update(db_from_env)
+# Activate django-Heroku
 django_heroku.settings(locals())
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
