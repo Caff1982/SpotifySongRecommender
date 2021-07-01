@@ -130,7 +130,7 @@ SPOTIPY_CLIENT_ID = os.environ['SPOTIFY_CLIENT_ID']
 SPOTIPY_CLIENT_SECRET = os.environ['SPOTIFY_CLIENT_SECRET']
 
 # Heroku: Update database configuration from $DATABASE_URL.
-import dj_database_url
+import dj_database_url, django_heroku
 db_from_env = dj_database_url.config(conn_max_age=500)
 DATABASES['default'].update(db_from_env)
 # Activate django-Heroku
