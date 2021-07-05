@@ -1,4 +1,4 @@
-## Spotify Song Recommender
+## Spotifynder Song Recommender
 
 I made this project to help me find new music. As much as I enjoy using Spotify I find that the music it recommends to me is mainly from arists that I've already heard. For this project I used Spotify's "hidden" features ('energy', 'danceability', 'speechiness', 'acousticness', 'instrumentalness', 'liveness' and 'valence') and found the cosine-theta simlarity between the features for a target track and a dataset of around 600k songs.
 The top twenty songs with the highest similarity are displayed.
